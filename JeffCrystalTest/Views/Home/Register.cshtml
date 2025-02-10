@@ -166,6 +166,7 @@
                     success: function (data) {
                         if (data.success) {
                             var result = data.responseText;
+
                             // looping through all 
                             $.each(JSON.parse(result), function (index, user) {
                                 console.log(user)
