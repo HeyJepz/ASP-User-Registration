@@ -25,3 +25,15 @@ Installations (Required)
 #### Edit view 
 - When row edit button is clicked
 ![image](https://github.com/user-attachments/assets/079852da-cde4-43bd-a678-dee51f0ae9b6)
+
+## Restore database using MySQL Administrator
+
+#### Click on 'Restore' tab and 'open backup file' button
+![image](https://github.com/user-attachments/assets/11e16eeb-a9c7-484f-a047-a7b4b3d8011b)
+
+#### Select your .sql file and click start restore
+![image](https://github.com/user-attachments/assets/b728344c-b2a2-4e4f-8fc3-9315df0a3583)
+![image](https://github.com/user-attachments/assets/2ac7e1b9-3006-4e01-9ddb-a25fb1d48daf)
+
+After that your database will be restored and you can view it in your MySQL Workbench.
+
