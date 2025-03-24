@@ -1,0 +1,92 @@
+﻿@model JeffCrystalTest.Models.Users
+@{
+    @*@model JeffCrystalTest.Models.Users*@
+    ViewBag.Title = "Contact";
+}
+
+<div>
+    <h2>@ViewBag.Title.</h2>
+    <h3>@ViewBag.Message</h3>
+
+    <address>
+        One Microsoft Way<br />
+        Redmond, WA 98052-6399<br />
+        <abbr title="Phone">P:</abbr>
+        425.555.0100
+    </address>
+
+    <address>
+        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
+        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
+    </address>
+</div>
+<hr />
+<div>
+    <form>
+        <div class="form-group">
+            @*@Html.Label("Email", new { @class = "control-label"})
+            @Html.TextBox("Email", null, new { @class = "form-control", @placeholder = "example@address.com", @required = "required" })*@
+            @*<label asp-for="Email">Email:</label>*@
+            @*<input type="email" class="form-control" id="Email" name="email" placeholder="example@address.com" required/>*@
+        </div>
+        <div class="form-group">
+            @*@Html.Label("Contact", new { @class = "control-label" })
+            @Html.TextBox("Contact", null, new { @class = "form-control", @placeholder = "09342425182", @required = "required" })*@
+            @*<label asp-for="Contact">Phone Number:</label>*@
+            @*<input type="number" class="form-control" id="Contact" name="contact" placeholsder="09123456789" required/>*@
+        </div>
+        @* Radio Box *@
+        <div class="form-check">
+            <h5><b>Gender</b></h5>
+            @*@Html.RadioButton("Gender", "Male")
+            @Html.RadioButton("Gender", "Female")*@
+            @*@Html.Label("Email", new { @class = "control-label" })*@
+            @*<input class="form-check-input" type="radio" name="gender" id="Gender" value="Male" required>
+            <label class="form-check-label" asp-for="Gender">
+                Male
+            </label>*@
+        </div>
+        <hr />
+        @*Drop down list *@
+        @*<div class="form-group">
+            <label asp-for="StatusId">Employment Status:</label>
+            <select class="form-control" id="EmploymentStatus" required>
+                <option>Student</option>
+                <option>Employed</option>
+                <option>Feelancer</option>
+                <option>Unemployed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Cities">City:</label>
+            <select multiple class="form-control" id="Cities" required>
+                <option>Valenzuela</option>
+                <option>Caloocan</option>
+                <option>Malabon</option>
+                <option>Navotas</option>
+                <option>Bulacan</option>
+            </select>
+        </div>*@
+
+        @* Text Area *@
+        <div class="form-group">
+            @Html.TextAreaFor(c=>c.Comments, new { @class = "form-control" })
+
+            @*<label asp-for="Comments">Comments</label>*@
+            @*<textarea class="form-control" id="Comments" rows="3"></textarea>*@
+        </div>  
+
+        @* I have read all terms chuchu *@
+        <div class="form-check">
+            @Html.CheckBoxFor(c => c.TermsAccepted, new { @class = "form-control" })
+            @*<input type="checkbox" class="form-check-input" id="TermsAccepted" required>
+            <label class="form-check-label" asp-for="TermsAccepted">Check me out</label>*@
+        </div>s
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<div>
+    <h1>Your Info</h1>
+    <h3>Email:</h3>
+    <p>Viewbag.Email</p>
+</div>

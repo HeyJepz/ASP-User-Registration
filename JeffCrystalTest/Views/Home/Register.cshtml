@@ -1,0 +1,282 @@
+﻿
+@{
+    ViewBag.Title = "CRUD";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewData["Title"]</title>
+    </head>
+    <body>
+        <h2>CRUD Testing</h2>
+
+        <form id="Registration">
+            <div class="mb-2">
+                <label for="fname">First Name</label>
+                <input type="text" id="fname" name="FirstName" placeholder="Enter your First Name" required />
+            </div>
+            <div class="mb-2">
+                <label for="lname">Last Name</label>
+                <input type="text" id="lname" name="LastName" placeholder="Enter your Last Name" required />
+            </div>
+            <div class="mb-2">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="Email" placeholder="Enter your Email" required />
+            </div>
+            <div class="mb-2">
+                <label for="male">Male</label>
+                <input type="radio" id="male" name="Gender" value="Male" required/>
+                <label for="female">Female</label>
+                <input type="radio" id="female" name="Gender" value="Female" />
+            </div>
+
+            <div>
+                <input class="form-check-input termsLink" type="checkbox" id="termsAndConditions" required>
+                <label class="form-check-label" for="termsAndConditions">
+                    I Accept Terms & Conditions
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="mt-4">
+            <table class="table table-hover" id="tblRegisteredUsers">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col" >First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col" >Email</th>
+                        <th scope="col">Gender</th>
+                    </tr>
+                </thead>
+                <tbody id="tbdyRegisteredUsers">
+                    @* data from database are appended here *@
+                </tbody>
+            </table>
+            <div aria-label="Page navigation example">
+                <ul class="pagination justify-content-end ">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </div>
+
+            @* fix aria error  *@
+            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editUser Form">
+                                <input type="hidden" id="user-id" name="user-id" value=""> <!-- Hidden ID field -->
+
+                                <div class="form-group">
+                                    <label for="first-name" class="col-form-label">First Name:</label>
+                                    <input type="text" class="form-control" id="first-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="last-name" class="col-form-label">Last Name:</label>
+                                    <input type="text" class="form-control" id="last-name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="e-mail" class="col-form-label">Email:</label>
+                                    <input type="email" class="form-control" id="e-mail">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender" class="col-form-label">Gender:</label>
+                                    <input type="text" class="form-control" id="gender">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveChanges" onclick="UpdateUser()" data-dismiss="modal">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script>
+
+            const usersPerPage = 5;
+            let currentPage = 1;
+            let totalUsers = 0;
+
+            LoadUsers();
+
+            // Registration Form
+            document.getElementById('Registration').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the form from submitting
+                let fname = document.getElementById('fname').value;
+                let lname = document.getElementById('lname').value;
+                let email = document.getElementById('email').value;
+                let gender = document.querySelector('input[name="Gender"]:checked');
+                let genderValue = gender ? gender.value : 'Not Selected';
+
+                let registrationData = {
+                    FirstName: fname,
+                    LastName: lname,
+                    Email: email,
+                    Gender: genderValue
+                }
+
+                fetch('/Home/Register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(registrationData)
+
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('Registration').reset();
+                    alert("Registration successful!");
+                    LoadUsers();
+                })
+                .catch((error) => {
+                    console.error('Error', error)
+                })
+            });
+            // Edit button
+            $(document).on('click', '.edit-btn', function () {
+                var userId = $(this).data('id');
+
+                // Fetch user data from your data source (e.g., an API or local data)
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetInfo", "Home")",
+                    success: function (data) {
+                        if (data.success) {
+                            var result = data.responseText;
+
+                            // looping through all 
+                            $.each(JSON.parse(result), function (index, user) {
+                                console.log(user)
+                                if (userId === user.id) {
+                                    // Populate the modal fields with user data
+                                    //console.log($('#last-name').val() + " LastName: " + user.LastName);
+                                    //console.log($('#e-mail').val() + " user.Email: " + user.Email);
+
+                                    // set data to each fields
+                                    $('#user-id').val(user.id);
+                                    $('#first-name').val(user.FirstName);
+                                    $('#last-name').val(user.LastName);
+                                    $('#e-mail').val(user.Email);
+                                    $('#gender').val(user.Gender);
+
+                                }
+
+                            }); 
+                        } else {
+                            console.error("Failed to retrieve user information.");
+                        }
+                    },
+                })
+            });
+
+            function LoadUsers() {
+                $("#tbdyRegisteredUsers").empty();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("GetInfo", "Home")",
+                    //data:{},
+                    async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            var result = data.responseText;
+                            $.each(JSON.parse(result), function (idx, user) {
+                                $("#tbdyRegisteredUsers").append("<tr>" +
+                                    "<th>" + user.id + "</th>" + 
+                                    "<td>" + user.FirstName + "</td>" +
+                                    "<td>" + user.LastName + "</td>" +
+                                    "<td>" + user.Email + "</td>" +
+                                    "<td>" + user.Gender + "</td>" +
+                                    "<td>" +
+                                        "<button class='tn btn-warning btn-sm edit-btn' data-toggle='modal' data-target='#EditModal' data-id='" + user.id + "'>Edit</button> " +
+                                        "<button class='btn btn-danger btn-sm delete-btn' data-id='" + user.id + "''>Delete</button>" +
+                                    "</td>" +
+                                    "</tr>");
+                            });
+                        }
+                    },
+                })
+            }
+
+            function UpdateUser() {
+                let user = $('#user-id').val();
+                let fname = $('#first-name').val();
+                let lname = $('#last-name').val();
+                let email = $('#e-mail').val();
+                let gender = $('#gender').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateInfo","Home")",
+                    data: {
+                        id:user,
+                        fname:fname,
+                        lname:lname,
+                        email:email,
+                        gender:gender
+                    },
+                })
+                LoadUsers()
+            }
+
+            $(document).on('click', '.delete-btn', function () {
+                var userId = $(this).data('id');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+
+                        // delete data
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("DeleteInfo", "Home")",
+                            data: {
+                                id: userId
+                            },
+                        })
+                        LoadUsers()
+                    }
+                });
+
+                
+            })
+        </script>
+    </body>
+</html>
