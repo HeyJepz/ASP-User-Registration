@@ -103,7 +103,7 @@ namespace JeffCrystalTest.Controllers
                     {
                         // turn the returned data from query to a list
                         list = con.Query<dynamic>(query).ToList();
-                        Console.Write(list);
+                        //Console.Write(list);
                         // convert to json
                         return Json(new { success = true, responseText = JsonConvert.SerializeObject(list), }, JsonRequestBehavior.AllowGet);
                     }catch(Exception e)

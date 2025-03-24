@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace JeffCrystalTest.Scripts {
+namespace JeffCrystalTest.Reports {
     using System;
     using System.ComponentModel;
     using CrystalDecisions.Shared;
@@ -16,14 +16,14 @@ namespace JeffCrystalTest.Scripts {
     using CrystalDecisions.CrystalReports.Engine;
     
     
-    public class CrystalReport1 : ReportClass {
+    public class users : ReportClass {
         
-        public CrystalReport1() {
+        public users() {
         }
         
         public override string ResourceName {
             get {
-                return "CrystalReport1.rpt";
+                return "users.rpt";
             }
             set {
                 // Do nothing
@@ -41,7 +41,7 @@ namespace JeffCrystalTest.Scripts {
         
         public override string FullResourceName {
             get {
-                return "JeffCrystalTest.Scripts.CrystalReport1.rpt";
+                return "JeffCrystalTest.Reports.users.rpt";
             }
             set {
                 // Do nothing
@@ -87,12 +87,20 @@ namespace JeffCrystalTest.Scripts {
                 return this.ReportDefinition.Sections[4];
             }
         }
+        
+        [Browsable(false)]
+        [DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+        public CrystalDecisions.Shared.IParameterField Parameter__lastName {
+            get {
+                return this.DataDefinition.ParameterFields[0];
+            }
+        }
     }
     
     [System.Drawing.ToolboxBitmapAttribute(typeof(CrystalDecisions.Shared.ExportOptions), "report.bmp")]
-    public class CachedCrystalReport1 : Component, ICachedReport {
+    public class Cachedusers : Component, ICachedReport {
         
-        public CachedCrystalReport1() {
+        public Cachedusers() {
         }
         
         [Browsable(false)]
@@ -129,7 +137,7 @@ namespace JeffCrystalTest.Scripts {
         }
         
         public virtual CrystalDecisions.CrystalReports.Engine.ReportDocument CreateReport() {
-            CrystalReport1 rpt = new CrystalReport1();
+            users rpt = new users();
             rpt.Site = this.Site;
             return rpt;
         }
