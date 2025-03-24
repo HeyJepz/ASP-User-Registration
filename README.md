@@ -17,7 +17,7 @@ Installations (Required)
 
 
 ### Application Screenshots
-####Home view
+#### Home view
 ![image](https://github.com/user-attachments/assets/b4872499-39cd-498f-91c7-da6f2a07a64f)
 
 ---------------------
